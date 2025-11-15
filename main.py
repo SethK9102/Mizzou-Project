@@ -1,5 +1,9 @@
-
+from turtle_object import Turtle_object
 import pygame
+
+trtl = Turtle_object()
+
+
 pygame.init()
 from plastic_object import Plastic
 
