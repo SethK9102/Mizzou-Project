@@ -3,6 +3,7 @@ import pygame
 from turtle_object import Turtle_object
 from saving import Database_manager
 from game_physics import GamePhysics
+from wave import Wave
 from music import Music
 from sound import Sound
 import threading
@@ -39,30 +40,38 @@ def main():
     turtle_y = SCREEN_HEIGHT // 2 - TURTLE_SIZE // 2
     turtle_rect = pygame.Rect(turtle_x, turtle_y, TURTLE_SIZE, TURTLE_SIZE)
 
+    wave = Wave(SCREEN_WIDTH, SCREEN_HEIGHT)
+    waves = [wave]
+    wave_spawn_timer = 0
+    wave_spawn_interval = random.randint(400, 600)
+
     food_rects = []
     for _ in range(5):
         fx = random.randint(-300, -10)
         fy = random.randint(0, SCREEN_HEIGHT - 12)
         food_rects.append({"rect": pygame.Rect(fx, fy, 20, 24), "speed": random.randint(1, 3)})
 
+    plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
     obstacles = []
     for _ in range(3):
         ox = random.randint(0, SCREEN_WIDTH - 30)
         oy = random.randint(0, SCREEN_HEIGHT - 30)
         ob_rect = pygame.Rect(ox, oy, 28, 28)
-        image = pygame.image.load("Images/Bottle.png")
-        plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
         obstacles.append({
             "rect": ob_rect,
             "dir_x": random.choice([-1, 1]),
             "dir_y": random.choice([-1, 1]),
             "speed": random.randint(1, 3),
-            "image": (random.choice(plastic_list))
+            "image": (random.choice(plastic_list)),
+            "boosted": False,
         })
 
     # Basic game loop variables
     running = True
     font = pygame.font.Font(None, 28)
+    
+    # Initialize base move speed for wave slowdown
+    physics.base_move_speed = physics.move_speed
 
     invuln_until = 0
     invuln_ms = 1500
@@ -78,6 +87,19 @@ def main():
 
         turtle_x, turtle_y = physics.turtle_movement(turtle_x, turtle_y, keys)
         turtle_rect.topleft = (turtle_x, turtle_y)
+
+        # Update all waves and remove inactive ones
+        for w in waves:
+            w.update()
+        waves = [w for w in waves if w.active]
+        
+        # Spawn new waves randomly
+        wave_spawn_timer += 1
+        if wave_spawn_timer >= wave_spawn_interval:
+            new_wave = Wave(SCREEN_WIDTH, SCREEN_HEIGHT)
+            waves.append(new_wave)
+            wave_spawn_timer = 0
+            wave_spawn_interval = random.randint(400, 600)
 
         # move trash left->right; respawn on left when off-screen
         for ob in obstacles:
@@ -116,6 +138,36 @@ def main():
                 turtle_rect.topleft = (turtle_x, turtle_y)
         # End Collision Detection
 
+        # Reset all object speeds to base speed first
+        for ob in obstacles:
+            if "base_speed" in ob:
+                ob["speed"] = ob["base_speed"]
+                ob["boosted"] = False
+        for f in food_rects:
+            if "base_speed" in f:
+                f["speed"] = f["base_speed"]
+                f["boosted"] = False
+        
+        # Reset turtle speed to normal
+        physics.move_speed = physics.base_move_speed
+        
+        # Apply wave effects from all active waves
+        for w in waves:
+            w.apply_to_obstacles(obstacles)
+            w.apply_to_food(food_rects)
+        
+        # Mark boosted objects
+        for w in waves:
+            for i in w.check_collision_with_obstacles(obstacles):
+                obstacles[i]["boosted"] = True
+            for i in w.check_collision_with_food(food_rects):
+                food_rects[i]["boosted"] = True
+            # Slow down turtle based on wave intensity when wave collides with it
+            if w.check_collision_with_turtle(turtle_rect):
+                slowdown_factor = 1 - (w.intensity * 0.1)  # Reduces speed by 10-50% depending on intensity
+                slowdown_factor = max(0.5, slowdown_factor)  # Never allow speed to go below 50% of normal
+                physics.move_speed = max(1, int(physics.base_move_speed * slowdown_factor))
+
         # respawn food if below minimum count, increase speed as score increases
         while len(food_rects) < 5:
             fx = random.randint(-300, -10)
@@ -133,7 +185,8 @@ def main():
             "dir_x": random.choice([-1, 1]),
             "dir_y": random.choice([-1, 1]),
             "speed": random.randint(1, 3),
-            "image":(random.choice(plastic_list))
+            "image":(random.choice(plastic_list)),
+            "boosted": False,
         })
         screen.fill((14, 135, 204))
         # Draw turtle with invulnerability flicker effect
@@ -157,7 +210,9 @@ def main():
                 image = pygame.transform.scale(image, (75, 60))
             trash = image.get_rect(center=ob["rect"].center)
             screen.blit(image, trash)
-        # Draw score and lives
+        # Draw all active waves as visible rectangle hitboxes
+        for w in waves:
+            pygame.draw.rect(screen, (100, 200, 255), w.rect, 3)
         score_surf = font.render(f"Score: {trtl.score}", True, (255, 255, 255))
         lives_surf = font.render(f"Lives: {trtl.lives}", True, (255, 255, 255))
         screen.blit(score_surf, (10, 10))
