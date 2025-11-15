@@ -1,8 +1,12 @@
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream:turtle.py
 class Turtle_object:
 =======
 import pygame
 >>>>>>> Stashed changes:turtle_object.py
+=======
+import pygame
+>>>>>>> Stashed changes
 
 class Turtle_object(pygame.sprite.Sprite):
 
