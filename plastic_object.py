@@ -18,3 +18,5 @@ class Plastic(pygame.sprite.Sprite):
         self.rect.y += 5
         if self.rect.top > SCREEN_HEIGHT:
             self.rect.bottom = 0
+            
+pygame.quit()
