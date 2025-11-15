@@ -3,9 +3,9 @@ import os
 
 class Turtle_object(pygame.sprite.Sprite):
 
-    def __init__(self, x, y):
+    def __init__(self, x=100, y=100):
         super().__init__()
-        self.image = pygame.image.load("Images/turtle.png").convert_alpha()
+        self.image = pygame.image.load("Images/turtle.png")
 
         # set a rect so Group.draw() can blit this sprite
         self.rect = self.image.get_rect()
