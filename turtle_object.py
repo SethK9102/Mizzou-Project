@@ -8,7 +8,7 @@ class Turtle_object(pygame.sprite.Sprite):
         # asked Copilot how to load a png in pygame
         # load image reliably using a path relative to this file
         base_dir = os.path.dirname(__file__)
-        image_path = os.path.join(base_dir, 'pixilart-drawing.png')
+        image_path = os.path.join(base_dir, 'turtle.png')
         try:
             img = pygame.image.load(image_path)
         except Exception as e:
