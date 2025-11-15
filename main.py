@@ -1,17 +1,17 @@
-from turtle_object import Turtle_object
 import pygame
-
-trtl = Turtle_object()
-
-
-pygame.init()
+from turtle_object import Turtle_object
 from plastic_object import Plastic
 
-#used Chat GPT to ask a question on how to get your screen width based on your screen
+pygame.init()
+
 info = pygame.display.Info()
 SCREEN_WIDTH = info.current_w
 SCREEN_HEIGHT = info.current_h - 85
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+all_sprites = pygame.sprite.Group()
+trtl = Turtle_object(SCREEN_WIDTH//4 * 3, SCREEN_HEIGHT//2)
+all_sprites.add(trtl)
 
 clock = pygame.time.Clock()
 
@@ -26,6 +26,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    # trtl.update()
+
+    all_sprites.draw(screen)
+    all_sprites.update()
     
     
     screen.fill((14, 135, 204))
