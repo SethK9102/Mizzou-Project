@@ -37,11 +37,13 @@ def main():
         ox = random.randint(0, SCREEN_WIDTH - 30)
         oy = random.randint(0, SCREEN_HEIGHT - 30)
         ob_rect = pygame.Rect(ox, oy, 28, 28)
+        plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
         obstacles.append({
             "rect": ob_rect,
             "dir_x": random.choice([-1, 1]),
             "dir_y": random.choice([-1, 1]),
             "speed": random.randint(1, 3),
+            "image": pygame.image.load(random.choice(plastic_list))
         })
 
     running = True
@@ -123,10 +125,8 @@ def main():
             image = pygame.image.load("Images/Shrimp.png")
             screen.blit(image, f["rect"])
         for ob in obstacles:
-            plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
             pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
-            image = pygame.image.load(random.choice(plastic_list))
-            screen.blit(image, ob["rect"])
+            screen.blit(ob["image"], ob["rect"])
 
         score_surf = font.render(f"Score: {trtl.score}", True, (255, 255, 255))
         lives_surf = font.render(f"Lives: {trtl.lives}", True, (255, 255, 255))
