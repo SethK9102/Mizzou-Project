@@ -18,6 +18,7 @@ class Turtle_object(pygame.sprite.Sprite):
             self.lives -= 1
         elif self.lives == 0:
             running = False
+        return running
 
     def gain_score(self, points):
         self.score += points

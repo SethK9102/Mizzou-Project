@@ -8,10 +8,10 @@ info = pygame.display.Info()
 SCREEN_WIDTH = info.current_w
 SCREEN_HEIGHT = info.current_h - 85
 
-class Plastic(pygame.sprite.Sprite):
-    def __init__(self, x_pos=700, y_pos=random.randint(0, SCREEN_HEIGHT)):
+class Food(pygame.sprite.Sprite):
+    def __init__(self, x_pos=500, y_pos=random.randint(0, SCREEN_HEIGHT)):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("Images/Plastic_Bag.png")
+        self.image = pygame.image.load("Images/Bottle.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x_pos, y_pos)
         
