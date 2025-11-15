@@ -39,13 +39,14 @@ def main():
         ox = random.randint(0, SCREEN_WIDTH - 30)
         oy = random.randint(0, SCREEN_HEIGHT - 30)
         ob_rect = pygame.Rect(ox, oy, 28, 28)
-        plastic_list = [pygame.transform.scale(pygame.image.load("Images/Bottle.png"), (28, 28)), "Images/Plastic_Bag.png", "Images/Straw.png"]
+        image = pygame.image.load("Images/Bottle.png")
+        plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
         obstacles.append({
             "rect": ob_rect,
             "dir_x": random.choice([-1, 1]),
             "dir_y": random.choice([-1, 1]),
             "speed": random.randint(1, 3),
-            "image": pygame.image.load(random.choice(plastic_list))
+            "image": (random.choice(plastic_list))
         })
 
     # Basic game loop variables
@@ -74,6 +75,7 @@ def main():
                 ob["rect"].x = -ob["rect"].width
                 ob["rect"].y = random.randint(0, SCREEN_HEIGHT - ob["rect"].height)
                 ob["speed"] = 1 + min(32, 1 + trtl.score // 50 + random.randint(0, 2))
+                ob["image"] = random.choice(plastic_list)
 
         # move food left->right and handle collisions
         for f in food_rects:
@@ -120,14 +122,17 @@ def main():
             "dir_x": random.choice([-1, 1]),
             "dir_y": random.choice([-1, 1]),
             "speed": random.randint(1, 3),
-            "image": pygame.image.load(random.choice(plastic_list))
+            "image":(random.choice(plastic_list))
         })
         screen.fill((14, 135, 204))
         # Draw turtle with invulnerability flicker effect
         if now < invuln_until and (now // 200) % 2 == 0:
             pass
         else:
-            pygame.draw.rect(screen, (0, 100, 0), turtle_rect)
+            image = pygame.image.load("Images/Turtle.png")
+            pygame.draw.rect(screen, BACKROUND_COLOR, turtle_rect)
+            turtle_image_rect = image.get_rect(center=turtle_rect.center)
+            screen.blit(image, turtle_image_rect)
         # Draw food and obstacles
         for f in food_rects:
             image = pygame.image.load("Images/Shrimp.png")
@@ -135,7 +140,10 @@ def main():
             shrimp_image_rect = image.get_rect(center=f["rect"].center)
             screen.blit(image, shrimp_image_rect)
         for ob in obstacles:
+            image = pygame.image.load(ob["image"])
             pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
+            trash = image.get_rect(center=ob["rect"].center)
+            screen.blit(image, trash)
         # Draw score and lives
         score_surf = font.render(f"Score: {trtl.score}", True, (255, 255, 255))
         lives_surf = font.render(f"Lives: {trtl.lives}", True, (255, 255, 255))
