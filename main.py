@@ -142,6 +142,8 @@ def main():
         for ob in obstacles:
             image = pygame.image.load(ob["image"])
             pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
+            if(ob["image"] == "Images/Straw.png"):
+                image = pygame.transform.scale(image, (80, 50))
             trash = image.get_rect(center=ob["rect"].center)
             screen.blit(image, trash)
         # Draw score and lives
