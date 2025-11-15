@@ -141,7 +141,7 @@ def main():
             screen.blit(image, shrimp_image_rect)
         for ob in obstacles:
             image = pygame.image.load(ob["image"])
-            pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
+            pygame.draw.rect(screen, BACKROUND_COLOR, ob["rect"])
             trash = image.get_rect(center=ob["rect"].center)
             screen.blit(image, trash)
         # Draw score and lives
