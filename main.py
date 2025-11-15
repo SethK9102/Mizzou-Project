@@ -14,6 +14,7 @@ db.create()
 info = pygame.display.Info()
 SCREEN_WIDTH = info.current_w
 SCREEN_HEIGHT = info.current_h - 85
+BACKROUND_COLOR = (14, 135, 204)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
@@ -114,9 +115,10 @@ def main():
         if now < invuln_until and (now // 200) % 2 == 0:
             pass
         else:
-            pygame.draw.rect(screen, (0, 100, 0), turtle_rect)
             image = pygame.image.load("Images/Turtle.png")
-            screen.blit(image, turtle_rect)
+            pygame.draw.rect(screen, BACKROUND_COLOR, turtle_rect)
+            turtle_image_rect = image.get_rect(center=turtle_rect.center) 
+            screen.blit(image, turtle_image_rect)
 
         for f in food_rects:
             pygame.draw.rect(screen, (255, 200, 0), f["rect"])
