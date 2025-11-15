@@ -3,8 +3,8 @@ pygame.init()
 
 #used Chat GPT to ask a question on how to get your screen width based on your screen
 info = pygame.display.Info()
-SCREEN_WIDTH = info.current_w - 50
-SCREEN_HEIGHT = info.current_h - 50
+SCREEN_WIDTH = info.current_w
+SCREEN_HEIGHT = info.current_h - 85
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 clock = pygame.time.Clock()
