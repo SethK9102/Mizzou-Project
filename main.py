@@ -42,7 +42,8 @@ def main():
         ox = random.randint(0, SCREEN_WIDTH - 30)
         oy = random.randint(0, SCREEN_HEIGHT - 30)
         ob_rect = pygame.Rect(ox, oy, 28, 28)
-        plastic_list = [pygame.transform.scale(pygame.image.load("Images/Bottle.png"), (28, 28)), pygame.transform.scale(pygame.image.load("Images/Plastic_Bag.png"), (28, 28)), pygame.transform.scale(pygame.image.load("Images/Straw.png"), (28, 28))]
+        image = pygame.image.load("Images/Bottle.png")
+        plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
         obstacles.append({
             "rect": ob_rect,
             "dir_x": random.choice([-1, 1]),
