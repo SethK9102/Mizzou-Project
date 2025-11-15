@@ -1,6 +1,13 @@
 import pygame
 from turtle_object import Turtle_object
+import pygame
 
+<<<<<<< HEAD
+=======
+trtl = Turtle_object()
+
+
+>>>>>>> upstream/main
 pygame.init()
 # used Chat GPT to ask a question on how to get your screen width based on your screen
 info = pygame.display.Info()
