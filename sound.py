@@ -9,5 +9,3 @@ class Sound():
         self.sound.play()
     def stop(self):
         self.sound.stop()
-        
-pygame.quit()
