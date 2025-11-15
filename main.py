@@ -3,10 +3,14 @@ import pygame
 from turtle_object import Turtle_object
 from saving import Database_manager
 from game_physics import GamePhysics
+from music import Music
+from sound import Sound
+import threading
 from wave import Wave
 # Imports for all libraries and classes used in the main game loop
 
 pygame.init()
+pygame.mixer.init()
 
 trtl = Turtle_object(0, 0)
 db = Database_manager()
@@ -22,6 +26,13 @@ clock = pygame.time.Clock()
 TURTLE_SIZE = 32
 physics = GamePhysics(SCREEN_WIDTH, SCREEN_HEIGHT, turtle_size=TURTLE_SIZE)
 # Class instances and global constants initialization
+
+
+waves = Music()
+waves.play()
+
+beat = Sound("Sounds/Light_Lofi.mp3", 0.8)
+beat.loop_sound()
 
 def main():
     # Initialize game objects
@@ -183,18 +194,20 @@ def main():
             pass
         else:
             image = pygame.image.load("Images/Turtle.png")
-            pygame.draw.rect(screen, BACKROUND_COLOR, turtle_rect)
+            # pygame.draw.rect(screen, BACKROUND_COLOR, turtle_rect)
             turtle_image_rect = image.get_rect(center=turtle_rect.center)
             screen.blit(image, turtle_image_rect)
         # Draw food and obstacles
         for f in food_rects:
             image = pygame.image.load("Images/Shrimp.png")
-            pygame.draw.rect(screen, BACKROUND_COLOR, f["rect"])
+            # pygame.draw.rect(screen, BACKROUND_COLOR, f["rect"])
             shrimp_image_rect = image.get_rect(center=f["rect"].center)
             screen.blit(image, shrimp_image_rect)
         for ob in obstacles:
             image = pygame.image.load(ob["image"])
-            pygame.draw.rect(screen, BACKROUND_COLOR, ob["rect"])
+            # pygame.draw.rect(screen, BACKROUND_COLOR, ob["rect"])
+            if(ob["image"] == "Images/Straw.png"):
+                image = pygame.transform.scale(image, (75, 60))
             trash = image.get_rect(center=ob["rect"].center)
             screen.blit(image, trash)
         # Draw all active waves as visible rectangle hitboxes
@@ -230,8 +243,9 @@ def main():
             # Render prompt
             screen.fill((10, 10, 30))
             screen.blit(pf.render("The Turtle Was Taken over by Trash!", True, (255, 255, 255)), (40, 40))
-            screen.blit(pf.render("Game Over - Enter your name:", True, (255, 255, 255)), (40, 80))
-            screen.blit(pf.render(name, True, (255, 200, 0)), (40, 130))
+            screen.blit(pf.render("If only people helped clean up the oceans, Franklin wouldn't be in this mess!", True, (255, 255, 255)), (40, 80))
+            screen.blit(pf.render("Game Over - Enter your name:", True, (255, 255, 255)), (40, 120))
+            screen.blit(pf.render(name, True, (255, 200, 0)), (40, 170))
             pygame.display.flip()
             clock.tick(60)
 
