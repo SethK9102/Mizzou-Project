@@ -115,6 +115,8 @@ def main():
             pass
         else:
             pygame.draw.rect(screen, (0, 100, 0), turtle_rect)
+            image = pygame.image.load("Images/Turtle.png")
+            screen.blit(image, turtle_rect)
 
         for f in food_rects:
             pygame.draw.rect(screen, (255, 200, 0), f["rect"])
