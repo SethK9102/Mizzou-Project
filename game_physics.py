@@ -1,4 +1,5 @@
 import pygame
+from sound import Sound
 
 class GamePhysics:
     # Initialize with screen dimensions and turtle size
@@ -56,6 +57,8 @@ class GamePhysics:
         # Check if the turtle collides with any obstacles
         for obstacle_rect in obstacle_items:
             if self.check_collision_rectangle(turtle_rect, obstacle_rect):
+                plast = Sound()
+                plast.play()
                 return True
         return False
     
