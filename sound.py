@@ -12,3 +12,6 @@ class Sound():
 
     def stop(self):
         self.sound.stop()
+
+    def loop_sound(self):
+        self.sound.play(-1)
