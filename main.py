@@ -120,8 +120,13 @@ def main():
 
         for f in food_rects:
             pygame.draw.rect(screen, (255, 200, 0), f["rect"])
+            image = pygame.image.load("Images/Shrimp.png")
+            screen.blit(image, f["rect"])
         for ob in obstacles:
+            plastic_list = ["Images/Bottle.png", "Images/Plastic_Bag.png", "Images/Straw.png"]
             pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
+            image = pygame.image.load(random.choice(plastic_list))
+            screen.blit(image, ob["rect"])
 
         score_surf = font.render(f"Score: {trtl.score}", True, (255, 255, 255))
         lives_surf = font.render(f"Lives: {trtl.lives}", True, (255, 255, 255))
