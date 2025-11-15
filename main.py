@@ -31,7 +31,7 @@ def main():
     for _ in range(5):
         fx = random.randint(-300, -10)
         fy = random.randint(0, SCREEN_HEIGHT - 12)
-        food_rects.append({"rect": pygame.Rect(fx, fy, 12, 12), "speed": random.randint(1, 3)})
+        food_rects.append({"rect": pygame.Rect(fx, fy, 20, 24), "speed": random.randint(1, 3)})
 
     obstacles = []
     for _ in range(3):
@@ -109,10 +109,12 @@ def main():
             oy = random.randint(0, SCREEN_HEIGHT - 30)
             ob_rect = pygame.Rect(ox, oy, 28, 28)
             obstacles.append({
-                "rect": ob_rect,
-                "speed": 1 + min(6, 1 + trtl.score // 50 + random.randint(0, 2)),
-            })
-
+            "rect": ob_rect,
+            "dir_x": random.choice([-1, 1]),
+            "dir_y": random.choice([-1, 1]),
+            "speed": random.randint(1, 3),
+            "image": pygame.image.load(random.choice(plastic_list))
+        })
         screen.fill((14, 135, 204))
         if now < invuln_until and (now // 200) % 2 == 0:
             pass
@@ -123,9 +125,10 @@ def main():
             screen.blit(image, turtle_image_rect)
 
         for f in food_rects:
-            pygame.draw.rect(screen, (255, 200, 0), f["rect"])
             image = pygame.image.load("Images/Shrimp.png")
-            screen.blit(image, f["rect"])
+            pygame.draw.rect(screen, BACKROUND_COLOR, f["rect"])
+            shrimp_image_rect = image.get_rect(center=f["rect"].center)
+            screen.blit(image, shrimp_image_rect)
         for ob in obstacles:
             pygame.draw.rect(screen, (150, 30, 30), ob["rect"])
             screen.blit(ob["image"], ob["rect"])
