@@ -27,12 +27,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     # trtl.update()
-
+    screen.fill((14, 135, 204))
     all_sprites.draw(screen)
     all_sprites.update()
     
     
-    screen.fill((14, 135, 204))
+    
     plastic_straws.update()
     plastic_straws.draw(screen)  
     pygame.display.flip()
